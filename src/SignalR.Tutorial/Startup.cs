@@ -1,12 +1,10 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SignalR.Tutorial.Data;
 using SignalR.Tutorial.Hubs;
 
 namespace SignalR.Tutorial
@@ -30,17 +28,10 @@ namespace SignalR.Tutorial
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(
-                    Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultUI()
-                .AddDefaultTokenProviders();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddSignalR();
+            services.AddSignalR(options => { options.EnableDetailedErrors = true; });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,7 +40,6 @@ namespace SignalR.Tutorial
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -61,11 +51,8 @@ namespace SignalR.Tutorial
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            app.UseAuthentication();
-
-            app.UseMvc();
-
             app.UseSignalR(routes => { routes.MapHub<ChatHub>("/hubs/chat"); });
+            app.UseMvc();
         }
     }
 }

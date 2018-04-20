@@ -12,6 +12,7 @@
         var sendButton = document.getElementById("send-button");
         var messagesList = document.getElementById("messages-list");
         var messageTextBox = document.getElementById("message-textbox");
+        var userList = document.getElementById("user-list");
 
         function appendMessage(content) {
             const li = document.createElement("li");
@@ -19,38 +20,57 @@
             messagesList.appendChild(li);
         }
 
+        function updateUserList(users) {
+            while (userList.hasChildNodes()) {
+                userList.removeChild(userList.firstChild);
+            }
+
+            users.sort().forEach(function(user, index) {
+                const li = document.createElement("li");
+                li.innerText = user;
+                userList.appendChild(li);
+            });
+        }
+
         var connection = new signalR.HubConnection("/hubs/chat");
 
         sendForm.addEventListener("submit",
-            function () {
+            function() {
                 const message = messageTextBox.value;
                 messageTextBox.value = "";
                 connection.send("Send", message);
             });
 
         connection.on("SendMessage",
-            function (sender, message) {
+            function(sender, message) {
                 appendMessage(sender + ': ' + message);
             });
 
         connection.on("SendAction",
-            function (sender, action) {
+            function(sender, action, users) {
                 appendMessage(sender + ' ' + action);
+                updateUserList(users);
             });
 
-        connection.start().then(function () {
+        connection.start().then(function() {
             messageTextBox.disabled = false;
             sendButton.disabled = false;
         });
     </script>
 }
 
-<h1>Chat</h1>
-
-<form id="send-form" action="#">
-    Send a message:
-    <input type="text" id="message-textbox" disabled />
-    <button id="send-button" type="submit" disabled>Send</button>
-</form>
-
-<ul id="messages-list"></ul>
+    <div class="row">
+        <div class="col-md-9">
+            <h1>Chat</h1>
+            <form id="send-form" action="#">
+                Send a message:
+                <input type="text" id="message-textbox" disabled/>
+                <button id="send-button" type="submit" disabled>Send</button>
+            </form>
+            <ul id="messages-list"></ul>
+        </div>
+        <div class="col-md-3">
+            <h2>Active Users:</h2>
+            <ul id="user-list"></ul>
+        </div>
+    </div>
