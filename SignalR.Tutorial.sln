@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SignalR.Tutorial", "src\SignalR.Tutorial\SignalR.Tutorial.csproj", "{BD6EE0BE-9427-4187-975C-14E8EBCDBBA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalR.Tutorial.ConsoleApp", "src\SignalR.Tutorial.ConsoleApp\SignalR.Tutorial.ConsoleApp.csproj", "{9C9DE7BD-2031-4AE8-AB37-B3292508C479}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SignalR.Tutorial.ConsoleApp", "src\SignalR.Tutorial.ConsoleApp\SignalR.Tutorial.ConsoleApp.csproj", "{9C9DE7BD-2031-4AE8-AB37-B3292508C479}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
